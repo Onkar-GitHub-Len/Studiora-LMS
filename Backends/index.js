@@ -6,6 +6,7 @@ import { clerkWebHooks } from "./controllers/webHooks.js";
 
 const app = express();
 
+app.use(cors());
 // Port
 const PORT = process.env.PORT || 8000;
 
@@ -13,7 +14,6 @@ const PORT = process.env.PORT || 8000;
 await connectDb();
 
 // Middleware
-app.use(cors());
 app.use(express.json()); // optional, but usually added to parse JSON requests
 
 // Routes
@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
     res.send("API is Working");
 });
 
-app.post("/clerl", express.json(), clerkWebHooks)
+app.post("/clerk", express.json(), clerkWebHooks)
 
 // Start the server
 app.listen(PORT, () => {
