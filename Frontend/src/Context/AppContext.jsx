@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { dummyCourses } from "../assets/assets"; // Importing dummy data for courses
 import { useNavigate } from "react-router-dom"; // For programmatic navigation
 import humanizeDuration from "humanize-duration";
+import { useAuth, useUser } from "@clerk/clerk-react";
 
 // Creating a new context to share data across components
 export const AppContext = createContext();
@@ -10,6 +11,9 @@ export const AppContext = createContext();
 export const AppContextProvide = (props) => {
   // Getting currency from environment variable (e.g., USD, INR)
   const currency = import.meta.env.VITE_CURRENCY;
+
+  const { getToken } = useAuth();
+  const { user } = useUser();
 
   // Hook to navigate programmatically (e.g., navigate("/login"))
   const navigate = useNavigate();
@@ -75,6 +79,16 @@ export const AppContextProvide = (props) => {
     fetchUserEnrolledCourses();
     fetchAllCourses();
   }, []);
+
+  const logToken = async () => {
+    console.log(await getToken());
+  };
+
+  useEffect(() => {
+    if (user) {
+      logToken();
+    }
+  }, [user]);
 
   // Values to be shared globally via context
   const value = {
