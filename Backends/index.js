@@ -3,7 +3,7 @@ import cors from "cors";
 import "dotenv/config";
 import connectDb from "./configs/mongodb.js";
 import connectCloudinary from "./configs/cloudinary.js";
-import { clerkWebHooks } from "./controllers/webHooks.js";
+import { clerkWebHooks, stripeWebHooks } from "./controllers/webHooks.js";
 import educatorRouter from "./routes/educatorRoutes.js";
 import courseRouter from "./routes/courseRoute.js";
 import { clerkMiddleware } from "@clerk/express";
@@ -40,6 +40,8 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ success: false, message: "Internal Server Error" });
 });
+app.post("/stripe", express.raw({type:'application/json'}),stripeWebHooks)
+
 
 // Port
 const PORT = process.env.PORT || 8000;
